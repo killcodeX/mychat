@@ -1,0 +1,28 @@
+{
+  "name": "mychat",
+  "version": "1.0.0",
+  "description": "Realtime chatroom with rooms",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/killcodeX/mychat.git"
+  },
+  "author": "Aaquib Ahmed",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/killcodeX/mychat/issues"
+  },
+  "homepage": "https://github.com/killcodeX/mychat#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "moment": "^2.24.0",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
