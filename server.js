@@ -3,6 +3,7 @@ const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
 const formatMessage = require('./utils/messages');
+const {userJoin, getCurrentUser } = require('./utils/users');
 
 const app = express();
 const server = http.createServer(app);
@@ -17,11 +18,15 @@ const botname = 'Chatcord Bot';
 io.on('connection', socket => {
     // console.log('New WS Connection.... ');
     socket.on('joinroom', ({username, room}) => {
+
+        const user = userJoin(socket.id, username, room);
+        socket.join(user.room)
+
         // Welcome to current user
         socket.emit('message', formatMessage(botname, 'Welcome to chatcord'))
 
         // Broadcast when user connects
-        socket.broadcast.emit('message', formatMessage(botname,"A user has joined the chat")); 
+        socket.broadcast.to(user.room).emit('message', formatMessage(botname,`${user.username} has joined the chat`)); 
     });
 
     // Listen for chatMessage
@@ -31,7 +36,7 @@ io.on('connection', socket => {
 
     // Runs when client disconnects
     socket.on('disconnect', () => {
-        io.emit('message', formatMessage(botname,'A user has left the chat'));
+        io.emit('message', formatMessage(botname,`A user has left the chat`));
     });
 });
 
