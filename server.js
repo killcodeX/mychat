@@ -16,21 +16,22 @@ const botname = 'Chatcord Bot';
 // Run when client connects
 io.on('connection', socket => {
     // console.log('New WS Connection.... ');
+    socket.on('joinroom', ({username, room}) => {
+        // Welcome to current user
+        socket.emit('message', formatMessage(botname, 'Welcome to chatcord'))
 
-    // Welcome to current user
-    socket.emit('message', formatMessage(botname, 'Welcome to chatcord'))
-
-    // Broadcast when user connects
-    socket.broadcast.emit('message', formatMessage(botname,"A user has joined the chat"));
-
-    // Runs when client disconnects
-    socket.on('disconnect', () => {
-        io.emit('message', formatMessage(botname,'A user has left the chat'));
+        // Broadcast when user connects
+        socket.broadcast.emit('message', formatMessage(botname,"A user has joined the chat")); 
     });
 
     // Listen for chatMessage
     socket.on('chatMessage', msg => {
         io.emit('message', formatMessage('USER',msg));
+    });
+
+    // Runs when client disconnects
+    socket.on('disconnect', () => {
+        io.emit('message', formatMessage(botname,'A user has left the chat'));
     });
 });
 
