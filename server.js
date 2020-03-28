@@ -26,7 +26,13 @@ io.on('connection', socket => {
         socket.emit('message', formatMessage(botname, 'Welcome to chatcord'))
 
         // Broadcast when user connects
-        socket.broadcast.to(user.room).emit('message', formatMessage(botname,`${user.username} has joined the chat`)); 
+        socket.broadcast.to(user.room).emit('message', formatMessage(botname,`${user.username} has joined the chat`));
+        
+        // Sends users and room info
+        io.to(user.room).emit('roomUsers', {
+            room:user.room,
+            users:getRoomUsers(user.room)
+        });
     });
 
     // Listen for chatMessage
@@ -39,6 +45,12 @@ io.on('connection', socket => {
         const user = userLeave(socket.id);
         if(user){
             io.to(user.room).emit('message', formatMessage(botname,`${user.username} has left the chat`));
+
+            // Sends users and room info
+            io.to(user.room).emit('roomUsers', {
+                room:user.room,
+                users:getRoomUsers(user.room)
+            });
         }
     });
 });
